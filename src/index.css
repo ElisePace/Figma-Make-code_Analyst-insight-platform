@@ -1,0 +1,310 @@
+/* ── Typeface: Source Sans 3 (Google Fonts) ─────────────────────────────────
+   Loaded before any other CSS so it is available immediately.
+   Weights: 400 Regular · 500 Medium · 600 SemiBold
+   Usage rule: headings → 600, body → 400, small / labels → 500, tabular → tnum
+   ─────────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&display=swap');
+
+/* Design system: @make-kits/figma-ui-kit-and-design-system-2026-plus-ui-free-community
+   The kit's stylesheet owns colour primitives, spacing, radius, and the type
+   ramp class names (.regular-text-*, .medium-text-*, .semi-bold-text-*,
+   .bold-text-*). Font-family inside those classes is overridden below. */
+@import '@make-kits/figma-ui-kit-and-design-system-2026-plus-ui-free-community/style.css';
+@import 'tailwindcss';
+
+/* ─── Enterprise colour system ────────────────────────────────────────────────
+   Light mode is the default. A `html.dark` block below provides the dark
+   override. Every colour, surface, and control the app renders resolves
+   through one of these tokens — change a token here and the whole UI updates.
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* ── Text scale ── */
+  --ink: #0F172A;      /* primary text */
+  --ink-soft: #475569; /* secondary / metadata */
+  --ink-faint: #64748B; /* disabled / placeholder */
+
+  /* ── Surfaces ── */
+  --canvas: #FFFFFF;   /* page background */
+  --card: #F8FAFC;     /* cards, panels, sidekick */
+
+  /* ── Borders ── */
+  --hairline: #E2E8F0;
+
+  /* ── Brand primary (enterprise blue) ── */
+  --brand: #034BDC;
+  --accent: var(--brand);
+  --accent-soft: color-mix(in srgb, var(--brand) 10%, transparent);
+  --accent-faint: color-mix(in srgb, var(--brand) 5%, transparent);
+  --accent-line: color-mix(in srgb, var(--brand) 16%, transparent);
+
+  /* ── Status colours ── */
+  --success: #16A34A;
+  --success-soft: color-mix(in srgb, var(--success) 12%, transparent);
+  --warning: #D97706;
+  --warning-soft: color-mix(in srgb, var(--warning) 14%, transparent);
+  --error: #DC2626;
+  --error-soft: color-mix(in srgb, var(--error) 10%, transparent);
+  --info: #0284C7;
+  --info-soft: color-mix(in srgb, var(--info) 12%, transparent);
+
+  /* ── Semantic labels (evidence / assumption / unknown) ── */
+  --evidence: var(--info);
+  --evidence-soft: var(--info-soft);
+  --assumption: var(--warning);
+  --assumption-soft: var(--warning-soft);
+  --assumption-faint: color-mix(in srgb, var(--warning) 7%, transparent);
+  --unknown: var(--ink-soft);
+  --unknown-soft: color-mix(in srgb, var(--ink-soft) 10%, transparent);
+
+  /* ── Restricted / locked source ── */
+  --restricted: var(--error);
+  --restricted-soft: var(--error-soft);
+  --restricted-faint: color-mix(in srgb, var(--error) 5%, transparent);
+
+  /* ── Data-viz + control neutrals ── */
+  --chart-bar: color-mix(in srgb, var(--brand) 18%, #E2E8F0);
+  --chart-bar-projected: #E2E8F0;
+  --chart-bar-projected-stroke: var(--hairline);
+  --chart-dip: var(--brand);
+  --avatar: var(--brand);
+  --control-border: #94A3B8;
+  --scrollbar: color-mix(in srgb, var(--brand) 30%, transparent);
+  --shimmer-from: #F1F5F9;
+  --shimmer-mid: #E2E8F0;
+  --toast: #1E293B;
+  --overlay: rgba(15, 23, 42, 0.50);
+  --white: #FFFFFF;
+
+  --radius: var(--radius-lg);
+
+  /* ── Font tokens: Source Sans 3 for all text ── */
+  --font-body: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion. The kit ships no motion scale beyond a single default duration and
+     easing curve, so the two-step scale lives here and reuses the kit's curve.
+     --dur-micro: hovers, presses, small state flips.
+     --dur-move:  panel/meter/status changes, count-ups, badges. */
+  --dur-micro: 150ms;
+  --dur-move: 260ms;
+  --stagger: 40ms;
+  --ease: var(--default-transition-timing-function);
+
+  /* Elevation — the kit ships no shadow tokens or shadow-* utilities, so the
+     scale is defined here (tinted with --ink) to stay editable from the CSS. */
+  --shadow-card: 0 2px 8px -4px color-mix(in srgb, var(--ink) 14%, transparent);
+  --shadow-card-hover: 0 6px 20px -6px color-mix(in srgb, var(--brand) 42%, transparent);
+  --shadow-menu: 0 8px 24px -8px color-mix(in srgb, var(--ink) 22%, transparent);
+  --shadow-modal: 0 24px 48px -12px color-mix(in srgb, var(--ink) 30%, transparent);
+  --shadow-toast: 0 8px 24px -8px color-mix(in srgb, var(--ink) 36%, transparent);
+}
+
+/* ─── Type-ramp font-family override ─────────────────────────────────────────
+   The kit hardcodes `font-family: Inter` inside every .regular-text-*,
+   .medium-text-*, .semi-bold-text-*, and .bold-text-* class. These rules come
+   after the kit import so they win the cascade and apply Source Sans 3 to all
+   type-ramp usage in the app.
+
+   Weight mapping per brief:
+     • Headings  → SemiBold 600  (.semi-bold-text-* and .bold-text-*)
+     • Body       → Regular 400   (.regular-text-*)
+     • Small/labels → Medium 500  (.medium-text-*)
+     • Tabular nums → .tnum class (font-feature-settings, family unchanged)
+   ─────────────────────────────────────────────────────────────────────────── */
+[class*='regular-text-'] {
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+[class*='medium-text-'] {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+[class*='semi-bold-text-'] {
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+[class*='bold-text-'] {
+  font-family: var(--font-body);
+  font-weight: 600; /* user spec: headings SemiBold; no heavier weight loaded */
+}
+
+/* ─── Dark mode overrides ─────────────────────────────────────────────────────
+   Applied when `html` carries the `.dark` class (toggled by the Theme button).
+   Every token resolves through the same names — no component changes needed.
+   ─────────────────────────────────────────────────────────────────────────── */
+html.dark {
+  /* Text */
+  --ink: #F1F5F9;
+  --ink-soft: #94A3B8;
+  --ink-faint: #64748B;
+
+  /* Surfaces */
+  --canvas: #0F172A;
+  --card: #1E293B;
+
+  /* Borders */
+  --hairline: rgba(148, 163, 184, 0.16);
+
+  /* Brand primary in dark */
+  --brand: #60A5FA;
+  --accent-soft: color-mix(in srgb, var(--brand) 14%, transparent);
+  --accent-faint: color-mix(in srgb, var(--brand) 7%, transparent);
+  --accent-line: color-mix(in srgb, var(--brand) 18%, transparent);
+
+  /* Status colours in dark */
+  --success: #4ADE80;
+  --warning: #FBBF24;
+  --error: #F87171;
+  --info: #38BDF8;
+
+  /* Data-viz in dark */
+  --chart-bar: color-mix(in srgb, var(--brand) 22%, rgba(30, 41, 59, 0.8));
+  --chart-bar-projected: rgba(148, 163, 184, 0.15);
+  --chart-bar-projected-stroke: var(--hairline);
+  --chart-dip: var(--brand);
+  --avatar: var(--brand);
+  --control-border: #64748B;
+  --scrollbar: color-mix(in srgb, var(--brand) 35%, transparent);
+  --shimmer-from: rgba(30, 41, 59, 0.9);
+  --shimmer-mid: rgba(51, 65, 85, 0.9);
+  --toast: #334155;
+  --overlay: rgba(0, 0, 0, 0.65);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+/* Single radius utility. The kit defines only --radius-lg (plus rounded-full),
+   so every non-pill corner in the app resolves through this one token.
+   Declared after the Tailwind import so it wins over Tailwind's own scale. */
+.r-token {
+  border-radius: var(--radius);
+}
+
+html {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Display face — Source Sans 3 SemiBold for wordmark and page headings. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+/* hide scrollbars until scrolling */
+.scroll-quiet {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.scroll-quiet:hover {
+  scrollbar-color: var(--scrollbar) transparent;
+}
+.scroll-quiet::-webkit-scrollbar {
+  width: var(--space-2);
+}
+.scroll-quiet::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: var(--radius);
+}
+.scroll-quiet:hover::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+}
+
+/* Motion is opt-in. Every animated class below renders its finished state by
+   default; the keyframes are only attached inside the no-preference query, so
+   with reduced motion set the UI still changes state — it just doesn't move. */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-from) 25%,
+    var(--shimmer-mid) 37%,
+    var(--shimmer-from) 63%
+  );
+  background-size: 200% 100%;
+}
+
+/* end-states, so nothing is left invisible when motion is off */
+.rise,
+.swap-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .shimmer {
+    animation: shimmer 1.4s ease infinite;
+  }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rise {
+    animation: riseIn 0.25s ease both;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  .pulse-dot {
+    animation: pulseDot 1s ease infinite;
+  }
+
+  /* cross-fade used by the turn-taking cue and the agent status line */
+  @keyframes swapIn {
+    from { opacity: 0; transform: translateY(2px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .swap-in {
+    animation: swapIn var(--dur-move) var(--ease) both;
+  }
+
+  .motion-move {
+    transition:
+      width var(--dur-move) var(--ease),
+      background-color var(--dur-move) var(--ease),
+      color var(--dur-move) var(--ease);
+  }
+  .motion-micro {
+    transition:
+      background-color var(--dur-micro) var(--ease),
+      border-color var(--dur-micro) var(--ease),
+      color var(--dur-micro) var(--ease);
+  }
+}
+
+/* Visible focus for every interactive/focusable element, keyed to the brand. */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* Hover tints derived from --ink rather than a hardcoded black. */
+.hover-tint:hover {
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+.hover-tint-subtle:hover {
+  background: color-mix(in srgb, var(--ink) 3%, transparent);
+}
